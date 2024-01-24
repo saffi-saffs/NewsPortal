@@ -3,12 +3,12 @@ from django.http import JsonResponse
 from keras.utils import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.models import load_model
-
-
+from django import forms
+import preprocess_kgptalkie as ps
 model = load_model("C:\\Users\\Admin\\Downloads\\yt_balanced_lstm.h5")
 
 
-import preprocess_kgptalkie as ps
+
 
 
 tokenizer = Tokenizer()  
@@ -36,7 +36,7 @@ def NewsDisplay(request):
                 result = 'This news is likely fake.'
         
 
-        return render(request, 'homePage/result.html', {'result': result,'prediction':prediction})
+        return render(request, 'homePage/homeindex.html', {'result': result,'prediction':prediction})
 
 
     return render(request, "homePage/homeindex.html")
