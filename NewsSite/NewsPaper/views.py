@@ -43,3 +43,32 @@ def News(request):
 
   
     return render(request, "NewsPaper/newsindex.html", context)
+
+from .models import NewsApiArticle
+
+def NewsAPI(request):
+    api_articles = NewsApiArticle.objects.all()
+
+    context = {'api_articles': api_articles}
+
+    return render(request, "NewsPaper/newsapi.html", context)
+# views.py
+from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .models import GoogleNewsArticle
+
+def google_news_database(request):
+    articles = GoogleNewsArticle.objects.all()
+
+    paginator = Paginator(articles, 5)
+    page = request.GET.get('page')
+
+    try:
+        articles = paginator.page(page)
+    except PageNotAnInteger:
+        articles = paginator.page(1)
+    except EmptyPage:
+        articles = paginator.page(paginator.num_pages)
+
+    context = {'articles': articles}
+    return render(request, 'NewsPaper/google.html', context)

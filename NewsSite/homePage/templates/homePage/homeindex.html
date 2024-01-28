@@ -3,9 +3,9 @@
   
 <div class="container mt-4">
   <div class="row">
-    <!-- Detection Window Column -->
+  
     <div class="col-md-8">
-      <!-- Detection page -->
+      <!-- Detection part -->
       <div class="detectionWindow">
         <h3>Fake News Detection System</h3> 
    
@@ -19,7 +19,7 @@
         </form>
       </div>
     </div>
-
+<!--Detection part Ends-->
     <!-- Result section -->
     <div class="col-md-4">
       <h3> Result</h3>
@@ -31,19 +31,23 @@
         </div>
       {% endif %}
     </div>
-
+<!--Result section Ends-->
   </div>
 
-  <!-- JavaScript code for the progress bar -->
+  <!-- progress bar ko part-->
   <script>
     var i = 0;
-    var prediction = "{{ prediction|default:0 }}";
+    var prediction = "{{ prediction }}";
     move(parseFloat(prediction) * 100);
 
     function move(uiValue) {
+  
       if (i == 0) {
         i = 1;
         var elem = document.getElementById("myBar");
+            if (!elem) {
+    return;  
+  }
         var width = 10;
         var id = setInterval(frame, 10);
 
@@ -61,7 +65,7 @@
     }
   </script>
 
-  <!-- JavaScript code for session storage and AJAX request -->
+  <!-- session storage and AJAX request -->
   <script>
     function setUserInputToSessionStorage() {
       userInputValue = document.getElementById('user_input').value;
@@ -69,13 +73,13 @@
     }
 
     async function makePrediction(event) {
-      event.preventDefault();  // Prevent default form submission behavior
+      event.preventDefault();  // Prevent default form submission
 
-      // Get user input
+      // Get our user input
       userInputValue = document.getElementById('user_input').value;
 
       try {
-        // asynchronous POST request to the Django view
+        // asynchronous POST request made to the view
         const response = await fetch('{% url "home" %}', {
           method: 'POST',
           headers: {
@@ -86,23 +90,25 @@
             'user_input': userInputValue,
           }),
         });
-
+ 
         const data = await response.json();
-        console.log(data);
+       
+        console.log(typeof(data));
 
-        // Update only the result section dynamically
+
+        // update only the result wala section
         document.getElementById('result').innerHTML = '<p>' + data.result + '</p><p>' + data.prediction + '</p>';
 
-        // Set the user input back to the input field
+        // set user ko input back to the input field
         document.getElementById('user_input').value = userInputValue;
       } catch (error) {
         console.error('Error:', error);
       }
     }
 
-    // Retain user input on page reload
+    // user input retain on form submission
     window.onload = function() {
-      // Check session storage for user input
+      // session storage for user input
       const storedUserInput = sessionStorage.getItem('user_input');
       
       if (storedUserInput) {
