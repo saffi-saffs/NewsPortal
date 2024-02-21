@@ -43,3 +43,5 @@ def News(request):
 
   
     return render(request, "NewsPaper/newsindex.html", context)
+
+
